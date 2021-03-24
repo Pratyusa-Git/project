@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -63,9 +64,10 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show()
     {
         //
+        
     }
 
     /**
@@ -74,9 +76,12 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit($category)
     {
         //
+        $category_id = base64_decode($category);
+        $categories = Category::find($category_id);
+        return view('category.edit')->with('categories',$categories);
     }
 
     /**
@@ -86,9 +91,14 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request)
     {
         //
+        $validate = $this->validate(request(),[
+            'category' => 'required',
+        ]);
+        Category::where('id',$request['category_id'])->update(['category'=>$request['category']]);
+        return redirect()->route('category_view');
     }
 
     /**
@@ -97,8 +107,14 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($category)
     {
         //
+        $category_id = base64_decode($category);
+        $category = Category::find($category_id);
+        Category::where('parent_id',$category_id)->update(['parent_id'=>$category['parent_id']]);
+        Product::where('category_id',$category_id)->update(['category_id'=>$category['parent_id']]);
+        $category->delete();
+        return redirect()->route('category_view');
     }
 }

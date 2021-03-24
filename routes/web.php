@@ -25,6 +25,9 @@ Route::get('/user_dashboard', 'HomeController@dashboard')->name('user_dashboard'
 Route::get('/add_category', 'CategoryController@create')->name('add_category')->middleware('role');
 Route::post('/addcategory', 'CategoryController@store')->name('addCategory')->middleware('role');
 Route::get('/category', 'CategoryController@index')->name('category_view')->middleware('role');
+Route::get('/edit_category/{category}', 'CategoryController@edit')->name('edit_category')->middleware('role');
+Route::post('/editCategory', 'CategoryController@update')->name('editCategory')->middleware('role');
+Route::get('/delete/{category}', 'CategoryController@destroy')->name('deleteCategory')->middleware('role');
 
 Route::get('/add_product/{category}', 'ProductController@create')->name('add_product')->middleware('role');
 Route::get('/products', 'ProductController@index')->name('product');

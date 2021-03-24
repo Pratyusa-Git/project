@@ -4,7 +4,7 @@
 
 <h2>Category</h2>
 @foreach($parent_categories as $key => $parent_category)
-  {{$parent_category->category}} <a href="{{route('add_product',['category'=>base64_encode($parent_category->id)])}}">Add Product</a><br>
+  {{$parent_category->category}} <a href="{{route('add_product',['category'=>base64_encode($parent_category->id)])}}">Add Product</a>  <a href="{{route('edit_category',['category'=>base64_encode($parent_category->id)])}}">Edit</a>  <a href="{{route('deleteCategory',['category'=>base64_encode($parent_category->id)])}}">Delete</a><br>
   @if(count($parent_category->subcategory))
     @include('category.subcategories',['subcategories'=>$parent_category->subcategory])
   @endif
